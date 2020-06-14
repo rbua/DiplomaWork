@@ -1,3 +1,4 @@
+using FLTR.IoC;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -20,6 +21,8 @@ namespace FLTR
         {
             services.AddControllers();
 
+            services.SetupDependencies();
+            
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
@@ -35,9 +38,14 @@ namespace FLTR
 
             app.UseSwagger();
 
-            app.UseSwaggerUI(c => c.SwaggerEndpoint("https://localhost:5001/swagger/v1/swagger.json", "FLTR API V1"));
+            app.UseStaticFiles();
 
-            app.UseRouting();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "FLTR API V1");
+            });
+
+            app.UseRouting ();
 
             app.UseAuthorization();
 
